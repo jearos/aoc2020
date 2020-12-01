@@ -1,8 +1,7 @@
+use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
-use std::fs::File;
 use std::path::Path;
-
 
 fn lines_from_file<P>(filename: P) -> Vec<String>
 where
@@ -15,7 +14,7 @@ where
         .collect()
 }
 
-fn calc(filename: String) -> i32 {
+fn calc(filename: &str) -> i32 {
     let lines = lines_from_file(filename);
     let mut numbers = Vec::new();
 
@@ -26,15 +25,15 @@ fn calc(filename: String) -> i32 {
 
     for i in 0..numbers.len() {
         for j in i..numbers.len() {
-            if numbers[i]+numbers[j] == 2020 {
-                return numbers[i]*numbers[j];
+            if numbers[i] + numbers[j] == 2020 {
+                return numbers[i] * numbers[j];
             }
         }
     }
     return 0;
 }
 
-fn calc2(filename: String) -> i32 {
+fn calc2(filename: &str) -> i32 {
     let lines = lines_from_file(filename);
     let mut numbers = Vec::new();
 
@@ -47,8 +46,8 @@ fn calc2(filename: String) -> i32 {
         for j in 0..numbers.len() {
             for k in 0..numbers.len() {
                 if (i != j) && (i != k) && (j != k) {
-                    if numbers[i]+numbers[j]+numbers[k] == 2020 {
-                        return numbers[i]*numbers[j]*numbers[k];
+                    if numbers[i] + numbers[j] + numbers[k] == 2020 {
+                        return numbers[i] * numbers[j] * numbers[k];
                     }
                 }
             }
@@ -58,8 +57,8 @@ fn calc2(filename: String) -> i32 {
 }
 
 fn main() {
-    assert_eq!(calc("src/example.txt".to_string()), 514579);
-    assert_eq!(calc("src/puzzle1.txt".to_string()), 921504);
-    assert_eq!(calc2("src/example.txt".to_string()), 241861950);
-    assert_eq!(calc2("src/puzzle1.txt".to_string()), 195700142);
+    assert_eq!(calc("src/example.txt"), 514579);
+    assert_eq!(calc("src/puzzle1.txt"), 921504);
+    assert_eq!(calc2("src/example.txt"), 241861950);
+    assert_eq!(calc2("src/puzzle1.txt"), 195700142);
 }
