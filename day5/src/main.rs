@@ -1,12 +1,10 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::io::BufReader;
-use std::path::Path;
+#[path = "../../common/aoc2020.rs"]
+mod aoc2020;
 
 fn get_row(bp: &str) -> u32 {
     let mut min = 0;
     let mut max = 127;
-    for i in 0..6 {
+    for i in 0..7 {
         let range = (max + 1 - min) / 2;
         if bp.chars().nth(i).unwrap() == 'F' {
             max = max - range;
@@ -14,19 +12,13 @@ fn get_row(bp: &str) -> u32 {
             min = min + range;
         }
     }
-    let row;
-    if bp.chars().nth(6).unwrap() == 'F' {
-        row = min;
-    } else {
-        row = max;
-    }
-    return row;
+    return min;
 }
 
 fn get_column(bp: &str) -> u32 {
     let mut min = 0;
     let mut max = 7;
-    for i in 7..9 {
+    for i in 7..10 {
         let range = (max + 1 - min) / 2;
         if bp.chars().nth(i).unwrap() == 'L' {
             max = max - range;
@@ -34,13 +26,7 @@ fn get_column(bp: &str) -> u32 {
             min = min + range;
         }
     }
-    let column;
-    if bp.chars().nth(9).unwrap() == 'L' {
-        column = min;
-    } else {
-        column = max;
-    }
-    return column;
+    return min;
 }
 
 fn scan_line(bp: &str) -> u32 {
@@ -58,19 +44,8 @@ fn scan_line2(bp: &str) -> i32 {
     return (row * 8 + column) as i32;
 }
 
-fn lines_from_file<P>(filename: P) -> Vec<String>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(filename).expect("no such file");
-    let buf = BufReader::new(file);
-    buf.lines()
-        .map(|l| l.expect("Could not parse line"))
-        .collect()
-}
-
 fn part1(filename: &str) -> u32 {
-    let lines = lines_from_file(filename);
+    let lines = aoc2020::lines_from_file(filename);
     let mut max = 0;
     for l in lines {
         let id = scan_line(&l.to_string());
@@ -82,7 +57,7 @@ fn part1(filename: &str) -> u32 {
 }
 
 fn part2(filename: &str) -> i32 {
-    let lines = lines_from_file(filename);
+    let lines = aoc2020::lines_from_file(filename);
     let mut v: Vec<i32> = Vec::new();
     for l in lines {
         let id = scan_line2(&l.to_string());
