@@ -3,12 +3,11 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
 
-fn scan_line(bp: &str) -> u32 {
+fn get_row(bp: &str) -> u32 {
     let mut min = 0;
     let mut max = 127;
-    let mut range;
     for i in 0..6 {
-        range = (max + 1 - min) / 2;
+        let range = (max + 1 - min) / 2;
         if bp.chars().nth(i).unwrap() == 'F' {
             max = max - range;
         } else {
@@ -21,11 +20,14 @@ fn scan_line(bp: &str) -> u32 {
     } else {
         row = max;
     }
+    return row;
+}
 
-    min = 0;
-    max = 7;
+fn get_column(bp: &str) -> u32 {
+    let mut min = 0;
+    let mut max = 7;
     for i in 7..9 {
-        range = (max + 1 - min) / 2;
+        let range = (max + 1 - min) / 2;
         if bp.chars().nth(i).unwrap() == 'L' {
             max = max - range;
         } else {
@@ -38,48 +40,22 @@ fn scan_line(bp: &str) -> u32 {
     } else {
         column = max;
     }
-    return row * 8 + column;
+    return column;
+}
+
+fn scan_line(bp: &str) -> u32 {
+    return get_row(bp) * 8 + get_column(bp);
 }
 
 fn scan_line2(bp: &str) -> i32 {
-    let mut min = 0;
-    let mut max = 127;
-    let mut range;
-    for i in 0..6 {
-        range = (max + 1 - min) / 2;
-        if bp.chars().nth(i).unwrap() == 'F' {
-            max = max - range;
-        } else {
-            min = min + range;
-        }
-    }
-    let row;
-    if bp.chars().nth(6).unwrap() == 'F' {
-        row = min;
-    } else {
-        row = max;
-    }
+    let row = get_row(bp);
     if row == 0 || row == 127 {
         return -1;
     }
 
-    min = 0;
-    max = 7;
-    for i in 7..9 {
-        range = (max + 1 - min) / 2;
-        if bp.chars().nth(i).unwrap() == 'L' {
-            max = max - range;
-        } else {
-            min = min + range;
-        }
-    }
-    let column;
-    if bp.chars().nth(9).unwrap() == 'L' {
-        column = min;
-    } else {
-        column = max;
-    }
-    return row * 8 + column;
+    let column = get_column(bp);
+
+    return (row * 8 + column) as i32;
 }
 
 fn lines_from_file<P>(filename: P) -> Vec<String>
